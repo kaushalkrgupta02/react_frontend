@@ -12,6 +12,8 @@ import VenueModePage from "./pages/VenueMode";
 import NotFound from "./pages/NotFound";
 import { InstallPrompt } from "@/components/InstallPrompt";
 import { OfflineIndicator } from "@/components/OfflineIndicator";
+import { SplashScreen } from "@/components/SplashScreen";
+import { useState, useEffect } from "react";
 
 // Create stable QueryClient instance
 const queryClient = new QueryClient({
@@ -25,11 +27,34 @@ const queryClient = new QueryClient({
 });
 
 const App = () => {
+  const [showSplash, setShowSplash] = useState(true);
+  const [isFirstLoad, setIsFirstLoad] = useState(true);
+
+  useEffect(() => {
+    // Check if this is the first load
+    const hasLoadedBefore = sessionStorage.getItem('hasLoadedBefore');
+    if (hasLoadedBefore) {
+      setIsFirstLoad(false);
+      setShowSplash(false);
+    } else {
+      sessionStorage.setItem('hasLoadedBefore', 'true');
+    }
+  }, []);
+
+  const handleSplashComplete = () => {
+    setShowSplash(false);
+  };
+
   return (
     <QueryClientProvider client={queryClient}>
       <AuthProvider>
         <LanguageProvider>
           <TooltipProvider>
+            {/* Show splash screen only on first load */}
+            {showSplash && isFirstLoad && (
+              <SplashScreen onComplete={handleSplashComplete} minDuration={2000} />
+            )}
+            
             <OfflineIndicator />
             <Toaster />
             <Sonner position="top-center" />

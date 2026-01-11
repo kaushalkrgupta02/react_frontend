@@ -127,54 +127,99 @@ const PassScanner = forwardRef<HTMLDivElement, PassScannerProps>(function PassSc
 
   const startCamera = useCallback(async () => {
     setCameraError(null);
+    setIsScanning(false);
     
-    // First, request permission with user-friendly error handling
-    const permissionResult = await requestCameraPermission();
-    
-    if (!permissionResult.granted) {
-      setCameraError(permissionResult.error || 'Unable to access camera');
-      
-      if (permissionResult.state === 'denied') {
-        const instructions = getPermissionInstructions('camera');
-        toast.error(
-          <div className="space-y-2">
-            <p className="font-medium">Camera Access Denied</p>
-            <p className="text-xs whitespace-pre-line">{instructions}</p>
-            <p className="text-xs">Then refresh the page and try again.</p>
-          </div>,
-          { duration: 8000 }
-        );
-      } else if (permissionResult.state === 'unsupported') {
-        toast.error(permissionResult.error || 'Camera not supported');
-      } else {
-        toast.error('Unable to access camera');
-      }
-      setMode('manual');
-      return;
-    }
-    
-    // Permission granted, now start the camera stream
     try {
-      const stream = await navigator.mediaDevices.getUserMedia({
+      // Stop any existing stream first
+      if (streamRef.current) {
+        streamRef.current.getTracks().forEach(track => track.stop());
+        streamRef.current = null;
+      }
+
+      // Request camera with a timeout
+      const timeoutPromise = new Promise<never>((_, reject) => 
+        setTimeout(() => reject(new Error('Camera request timed out')), 10000)
+      );
+
+      const streamPromise = navigator.mediaDevices.getUserMedia({
         video: { 
-          facingMode: 'environment',
-          width: { ideal: 1280 },
-          height: { ideal: 720 }
+          facingMode: { ideal: 'environment' },
+          width: { ideal: 1280, max: 1920 },
+          height: { ideal: 720, max: 1080 }
         },
       });
+
+      const stream = await Promise.race([streamPromise, timeoutPromise]);
+      
+      if (!stream || !stream.active) {
+        throw new Error('Camera stream is not active');
+      }
+
       streamRef.current = stream;
 
       if (videoRef.current) {
         videoRef.current.srcObject = stream;
+        
+        // Wait for video to be ready
+        await new Promise<void>((resolve, reject) => {
+          const timeout = setTimeout(() => reject(new Error('Video load timeout')), 5000);
+          
+          if (videoRef.current) {
+            videoRef.current.onloadedmetadata = () => {
+              clearTimeout(timeout);
+              resolve();
+            };
+            videoRef.current.onerror = () => {
+              clearTimeout(timeout);
+              reject(new Error('Video load error'));
+            };
+          } else {
+            clearTimeout(timeout);
+            reject(new Error('Video element not found'));
+          }
+        });
+
         await videoRef.current.play();
         isScanningRef.current = true;
         setIsScanning(true);
         scanForQRCode();
       }
-    } catch (error) {
-      console.error('Camera start error:', error);
-      setCameraError('Unable to start camera');
-      toast.error('Camera failed to start. Please try again.');
+    } catch (error: any) {
+      console.error('Camera error:', error);
+      
+      // Clean up on error
+      if (streamRef.current) {
+        streamRef.current.getTracks().forEach(track => track.stop());
+        streamRef.current = null;
+      }
+      
+      const errorName = error?.name || '';
+      const errorMessage = error?.message || '';
+      
+      if (errorName === 'NotAllowedError' || errorName === 'PermissionDeniedError') {
+        const instructions = getPermissionInstructions('camera');
+        setCameraError('Camera permission denied');
+        toast.error(
+          <div className="space-y-2">
+            <p className="font-medium">Camera Access Denied</p>
+            <p className="text-xs whitespace-pre-line">{instructions}</p>
+          </div>,
+          { duration: 8000 }
+        );
+      } else if (errorName === 'NotFoundError' || errorName === 'DevicesNotFoundError') {
+        setCameraError('No camera found');
+        toast.error('No camera found on this device');
+      } else if (errorName === 'NotReadableError' || errorName === 'TrackStartError') {
+        setCameraError('Camera is busy');
+        toast.error('Camera is already in use by another app');
+      } else if (errorMessage.includes('timeout') || errorMessage.includes('timed out')) {
+        setCameraError('Camera timeout');
+        toast.error('Camera took too long to start. Please try again.');
+      } else {
+        setCameraError('Unable to start camera');
+        toast.error('Camera failed to start. Please try manual entry.');
+      }
+      
       setMode('manual');
     }
   }, [scanForQRCode]);

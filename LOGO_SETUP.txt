@@ -1,0 +1,46 @@
+# Logo Setup Instructions
+
+Your app now uses TWO separate logos:
+
+## 1. App Icon Logo
+**File:** `public/logo.png`
+- **Used for:** App icon on home screen, browser tabs, shortcuts
+- **Recommended size:** 512x512 pixels (minimum 192x192)
+- **Format:** PNG with transparent background (or solid color)
+- **Purpose:** This is what users see on their phone's home screen after installing the PWA
+
+## 2. Splash Screen Logo
+**File:** `public/splash-logo.png` (you need to add this)
+- **Used for:** Splash screen that shows when app first launches
+- **Recommended size:** 256x256 to 512x512 pixels
+- **Format:** PNG (can have transparent background)
+- **Purpose:** This appears for 2 seconds when users open your app from home screen
+
+## How to Add Your Splash Logo
+
+1. Create or prepare your splash screen logo (can be different from app icon)
+2. Save it as `splash-logo.png` in the `public` folder
+3. The app will automatically use it on the splash screen
+
+**Note:** If `splash-logo.png` doesn't exist, the app will automatically fallback to using `logo.png` for the splash screen.
+
+## Current Setup
+
+✅ Splash screen shows on first app load
+✅ Splash screen duration: 2 seconds
+✅ Shows only once per session (won't show on page refreshes)
+✅ Automatic fallback to logo.png if splash-logo.png is missing
+
+## File Structure
+```
+public/
+  ├── logo.png           ← App icon (already exists)
+  └── splash-logo.png    ← Add this for splash screen
+```
+
+## Customization
+
+To change splash screen duration or behavior, edit:
+- **File:** `src/App.tsx`
+- **Line:** `<SplashScreen onComplete={handleSplashComplete} minDuration={2000} />`
+- Change `minDuration={2000}` to your preferred milliseconds (e.g., 3000 = 3 seconds)

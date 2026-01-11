@@ -37,16 +37,13 @@
       "url": "/orders",
       "icons": [{ "src": "/logo.png", "sizes": "192x192" }]
     },
-
-  {
-    "name":"Settings",
-    "short_name":"Settings",
-    "description":"App settings",
-    "url":"/settings",
-    "icons":[{"src":"/logo.png","sizes":"192x192"}]
-  }
-
-
+    {
+      "name": "Settings",
+      "short_name": "Settings",
+      "description": "App settings",
+      "url": "/settings",
+      "icons": [{ "src": "/logo.png", "sizes": "192x192" }]
+    }
   ],
   "screenshots": []
 }
