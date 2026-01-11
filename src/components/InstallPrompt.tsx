@@ -17,7 +17,7 @@ export function InstallPrompt() {
   };
 
   return (
-    <div className="fixed bottom-4 left-4 right-4 md:left-auto md:right-4 md:max-w-md z-50">
+    <div className="fixed bottom-20 left-4 right-4 md:left-auto md:right-4 md:max-w-md z-50 mb-safe">
       <div className="bg-gradient-to-r from-purple-600 to-blue-600 text-white rounded-lg shadow-lg p-4">
         <div className="flex items-start gap-3">
           <Download className="w-6 h-6 flex-shrink-0 mt-1" />
