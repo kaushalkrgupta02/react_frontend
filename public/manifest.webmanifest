@@ -1,6 +1,6 @@
 {
-  "name": "Venue Manager",
-  "short_name": "VenueManager",
+  "name": "Nightly",
+  "short_name": "Nightly",
   "description": "Restaurant & Bar Staff Management App",
   "start_url": "/",
   "display": "standalone",

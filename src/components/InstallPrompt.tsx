@@ -22,7 +22,7 @@ export function InstallPrompt() {
         <div className="flex items-start gap-3">
           <Download className="w-6 h-6 flex-shrink-0 mt-1" />
           <div className="flex-1">
-            <h3 className="font-semibold mb-1">Install Venue Manager</h3>
+            <h3 className="font-semibold mb-1">Install Nightly</h3>
             <p className="text-sm text-white/90 mb-3">
               Install this app on your device for quick access and offline use.
             </p>
