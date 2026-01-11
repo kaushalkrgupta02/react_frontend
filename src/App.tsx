@@ -10,6 +10,8 @@ import StaffAuthPage from "./pages/StaffAuth";
 import StaffProfilePage from "./pages/StaffProfile";
 import VenueModePage from "./pages/VenueMode";
 import NotFound from "./pages/NotFound";
+import { InstallPrompt } from "@/components/InstallPrompt";
+import { OfflineIndicator } from "@/components/OfflineIndicator";
 
 // Create stable QueryClient instance
 const queryClient = new QueryClient({
@@ -28,8 +30,10 @@ const App = () => {
       <AuthProvider>
         <LanguageProvider>
           <TooltipProvider>
+            <OfflineIndicator />
             <Toaster />
             <Sonner position="top-center" />
+            <InstallPrompt />
             <BrowserRouter>
               <Routes>
                 {/* Auth */}
