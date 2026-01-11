@@ -1,0 +1,61 @@
+project_id = "swsogxafillkpayibzrw"
+
+[functions.ai-concierge]
+verify_jwt = true
+
+[functions.ai-promo-designer]
+verify_jwt = true
+
+[functions.ai-demand-forecast]
+verify_jwt = true
+
+[functions.ai-learning-loop]
+verify_jwt = true
+
+[functions.ai-customer-segmentation]
+verify_jwt = false
+
+[functions.ai-venue-profiler]
+verify_jwt = false
+
+[functions.ai-smart-matcher]
+verify_jwt = false
+
+[functions.send-whatsapp-reminder]
+verify_jwt = true
+
+[functions.notify-waitlist-guest]
+verify_jwt = false
+
+[functions.get-admin-bookings]
+verify_jwt = false
+
+[functions.update-booking-status]
+verify_jwt = false
+
+[functions.create-test-booking]
+verify_jwt = false
+
+[functions.generate-promo-image]
+verify_jwt = true
+
+[functions.process-commission-payout]
+verify_jwt = true
+
+[functions.ai-social-content]
+verify_jwt = true
+
+[functions.publish-to-social]
+verify_jwt = true
+
+[functions.send-invoice-email]
+verify_jwt = true
+
+[functions.telkomsel-link]
+verify_jwt = true
+
+[functions.telkomsel-crowd-sync]
+verify_jwt = false
+
+[functions.ai-prep-time-estimator]
+verify_jwt = false

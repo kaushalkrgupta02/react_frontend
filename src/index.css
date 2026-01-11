@@ -1,0 +1,283 @@
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;600;700&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Jakarta Nightlife App - District-Style Nightlife Design System
+   Dark base with vibrant purple identity, playful headlines, soft glows
+   All colors MUST be HSL.
+*/
+
+@layer base {
+  :root {
+    /* Core backgrounds - deep dark with purple undertones */
+    --background: 250 15% 5%;
+    --foreground: 0 0% 98%;
+
+    --card: 250 15% 8%;
+    --card-foreground: 0 0% 98%;
+
+    --popover: 250 15% 10%;
+    --popover-foreground: 0 0% 98%;
+
+    /* Primary - Vibrant purple */
+    --primary: 270 85% 60%;
+    --primary-foreground: 0 0% 100%;
+
+    /* Secondary - Muted purple-gray */
+    --secondary: 250 15% 15%;
+    --secondary-foreground: 0 0% 90%;
+
+    --muted: 250 12% 18%;
+    --muted-foreground: 250 10% 55%;
+
+    /* Accent - Hot pink/magenta */
+    --accent: 330 85% 58%;
+    --accent-foreground: 0 0% 100%;
+
+    --destructive: 0 72% 51%;
+    --destructive-foreground: 0 0% 100%;
+
+    --border: 250 15% 18%;
+    --input: 250 15% 18%;
+    --ring: 270 85% 60%;
+
+    /* Border radius - rounded and soft */
+    --radius: 1rem;
+    --radius-sm: 0.625rem;
+    --radius-lg: 1.25rem;
+    --radius-xl: 1.5rem;
+    --radius-2xl: 2rem;
+
+    /* Status colors - vibrant and readable */
+    --status-quiet: 152 80% 48%;
+    --status-perfect: 152 80% 48%;
+    --status-ideal: 48 100% 55%;
+    --status-busy: 32 100% 55%;
+    --status-too-busy: 0 75% 55%;
+
+    /* Navigation */
+    --nav-background: 250 20% 4%;
+    --nav-foreground: 250 10% 50%;
+    --nav-active: 270 85% 60%;
+
+    /* Gradients */
+    --gradient-primary: linear-gradient(135deg, hsl(270 85% 60%), hsl(330 85% 58%));
+    --gradient-card: linear-gradient(180deg, hsl(250 15% 12%), hsl(250 15% 7%));
+    --gradient-glow: radial-gradient(ellipse at center, hsl(270 85% 60% / 0.15), transparent 70%);
+    --gradient-shine: linear-gradient(135deg, hsl(270 85% 70%), hsl(270 85% 55%), hsl(330 85% 60%));
+    
+    /* Shadows & Glows */
+    --shadow-sm: 0 2px 8px -2px hsl(0 0% 0% / 0.4);
+    --shadow-md: 0 4px 16px -4px hsl(0 0% 0% / 0.5);
+    --shadow-lg: 0 8px 32px -8px hsl(0 0% 0% / 0.6);
+    --shadow-glow: 0 0 30px -5px hsl(270 85% 60% / 0.4);
+    --shadow-glow-accent: 0 0 30px -5px hsl(330 85% 58% / 0.4);
+    
+    /* Spacing scale */
+    --space-xs: 0.25rem;
+    --space-sm: 0.5rem;
+    --space-md: 1rem;
+    --space-lg: 1.5rem;
+    --space-xl: 2rem;
+    --space-2xl: 3rem;
+
+    /* Typography */
+    --font-display: 'Space Grotesk', sans-serif;
+    --font-body: 'Plus Jakarta Sans', system-ui, sans-serif;
+  }
+
+  .dark {
+    --background: 250 15% 5%;
+    --foreground: 0 0% 98%;
+    --card: 250 15% 8%;
+    --card-foreground: 0 0% 98%;
+    --popover: 250 15% 10%;
+    --popover-foreground: 0 0% 98%;
+    --primary: 270 85% 60%;
+    --primary-foreground: 0 0% 100%;
+    --secondary: 250 15% 15%;
+    --secondary-foreground: 0 0% 90%;
+    --muted: 250 12% 18%;
+    --muted-foreground: 250 10% 55%;
+    --accent: 330 85% 58%;
+    --accent-foreground: 0 0% 100%;
+    --destructive: 0 72% 51%;
+    --destructive-foreground: 0 0% 100%;
+    --border: 250 15% 18%;
+    --input: 250 15% 18%;
+    --ring: 270 85% 60%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    @apply bg-background text-foreground antialiased;
+    font-family: var(--font-body);
+    font-feature-settings: "cv11", "ss01";
+  }
+
+  /* Display font for headlines */
+  h1, h2, h3, .font-display {
+    font-family: var(--font-display);
+  }
+
+  /* Hide scrollbar for cleaner mobile look */
+  .scrollbar-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+  
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+@layer utilities {
+  /* Glass morphism */
+  .glass {
+    @apply bg-card/70 backdrop-blur-xl border border-border/40;
+  }
+
+  .glass-strong {
+    @apply bg-card/90 backdrop-blur-2xl border border-border/50;
+  }
+
+  /* Gradient text */
+  .gradient-text {
+    background: var(--gradient-primary);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .gradient-shine {
+    background: var(--gradient-shine);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  /* Glow effects */
+  .glow {
+    box-shadow: var(--shadow-glow);
+  }
+
+  .glow-accent {
+    box-shadow: var(--shadow-glow-accent);
+  }
+
+  .glow-subtle {
+    box-shadow: 0 0 20px -8px hsl(var(--primary) / 0.3);
+  }
+
+  /* Card hover glow */
+  .card-glow {
+    @apply transition-all duration-300;
+  }
+
+  .card-glow:hover {
+    box-shadow: 0 0 25px -5px hsl(var(--primary) / 0.25);
+  }
+
+  /* Gradient borders */
+  .gradient-border {
+    position: relative;
+    background: linear-gradient(var(--background), var(--background)) padding-box,
+                var(--gradient-primary) border-box;
+    border: 1px solid transparent;
+  }
+
+  /* Soft card backgrounds */
+  .card-gradient {
+    background: var(--gradient-card);
+  }
+
+  /* Status badge glow */
+  .status-glow {
+    box-shadow: 0 0 12px -2px currentColor;
+  }
+
+  /* Carousel snap */
+  .snap-x {
+    scroll-snap-type: x mandatory;
+  }
+
+  .snap-start {
+    scroll-snap-align: start;
+  }
+
+  /* Playful hover */
+  .hover-lift {
+    @apply transition-all duration-300 ease-out;
+  }
+
+  .hover-lift:hover {
+    @apply -translate-y-1;
+    box-shadow: var(--shadow-lg), 0 0 20px -5px hsl(var(--primary) / 0.2);
+  }
+
+  /* Section divider glow */
+  .divider-glow {
+    @apply h-px bg-gradient-to-r from-transparent via-primary/30 to-transparent;
+  }
+
+  /* Success particle animation */
+  @keyframes particle {
+    0% {
+      transform: translate(-50%, -50%) rotate(var(--particle-angle)) translateY(0) scale(1);
+      opacity: 1;
+    }
+    100% {
+      transform: translate(-50%, -50%) rotate(var(--particle-angle)) translateY(-60px) scale(0);
+      opacity: 0;
+    }
+  }
+
+  .animate-particle {
+    animation: particle 0.8s ease-out forwards;
+  }
+
+  /* Safe area padding for mobile devices with notches */
+  .safe-area-pt {
+    padding-top: env(safe-area-inset-top, 0px);
+  }
+
+  .safe-area-pb {
+    padding-bottom: env(safe-area-inset-bottom, 0px);
+  }
+
+  .safe-area-pl {
+    padding-left: env(safe-area-inset-left, 0px);
+  }
+
+  .safe-area-pr {
+    padding-right: env(safe-area-inset-right, 0px);
+  }
+
+  /* Touch-friendly minimum tap target */
+  .touch-target {
+    @apply min-h-[48px] min-w-[48px];
+  }
+
+  /* Prevent text selection on interactive elements */
+  .no-select {
+    -webkit-user-select: none;
+    user-select: none;
+    -webkit-touch-callout: none;
+  }
+
+  /* Smooth momentum scrolling on iOS */
+  .smooth-scroll {
+    -webkit-overflow-scrolling: touch;
+  }
+}
