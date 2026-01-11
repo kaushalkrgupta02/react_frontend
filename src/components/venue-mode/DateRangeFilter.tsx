@@ -110,46 +110,58 @@ export function DateRangeFilter({ value, onChange, className }: DateRangeFilterP
   return (
     <div className={cn('flex items-center gap-2 flex-wrap', className)}>
       {/* Preset buttons */}
-      <div className="flex gap-1.5 flex-wrap">
-        {(['today', 'week', 'month', 'year', 'all'] as DatePreset[]).map((preset) => (
+      <div className="flex gap-0.5 sm:gap-1.5 flex-wrap">
+        {(['today', 'week', 'month', 'year'] as DatePreset[]).map((preset) => (
           <Button
             key={preset}
             variant={value.preset === preset ? 'default' : 'outline'}
             size="sm"
             onClick={() => handlePresetClick(preset)}
-            className="h-8 px-3 text-xs"
+            className="h-8 px-2.5 sm:px-3 text-xs whitespace-nowrap"
           >
             {presetLabels[preset]}
           </Button>
         ))}
       </div>
 
-      {/* Custom date picker */}
-      <Popover open={calendarOpen} onOpenChange={setCalendarOpen}>
-        <PopoverTrigger asChild>
-          <Button
-            variant={value.preset === 'custom' ? 'default' : 'outline'}
-            size="sm"
-            className={cn(
-              'h-8 px-3 text-xs gap-1.5',
-              value.preset === 'custom' && 'min-w-[120px]'
-            )}
-          >
-            <CalendarDays className="w-3.5 h-3.5" />
-            {value.preset === 'custom' ? format(value.start as Date, 'MMM d') : 'Pick Date'}
-            <ChevronDown className="w-3 h-3 opacity-50" />
-          </Button>
-        </PopoverTrigger>
-        <PopoverContent className="w-auto p-0" align="start">
-          <Calendar
-            mode="single"
-            selected={value.start}
-            onSelect={handleDateSelect}
-            initialFocus
-            className="p-3 pointer-events-auto"
-          />
-        </PopoverContent>
-      </Popover>
+      {/* All and Pick Date in separate row/group */}
+      <div className="flex gap-0.5 sm:gap-1.5 w-full sm:w-auto">
+        <Button
+          variant={value.preset === 'all' ? 'default' : 'outline'}
+          size="sm"
+          onClick={() => handlePresetClick('all')}
+          className="h-8 px-2.5 sm:px-3 text-xs"
+        >
+          {presetLabels['all']}
+        </Button>
+
+        {/* Custom date picker */}
+        <Popover open={calendarOpen} onOpenChange={setCalendarOpen}>
+          <PopoverTrigger asChild>
+            <Button
+              variant={value.preset === 'custom' ? 'default' : 'outline'}
+              size="sm"
+              className={cn(
+                'h-8 px-2.5 sm:px-3 text-xs gap-1.5 flex-1 sm:flex-initial',
+                value.preset === 'custom' && 'min-w-[120px]'
+              )}
+            >
+              <CalendarDays className="w-3.5 h-3.5" />
+              {value.preset === 'custom' ? format(value.start as Date, 'MMM d') : 'Pick Date'}
+              <ChevronDown className="w-3 h-3 opacity-50" />
+            </Button>
+          </PopoverTrigger>
+          <PopoverContent className="w-auto p-0" align="start">
+            <Calendar
+              mode="single"
+              selected={value.start}
+              onSelect={handleDateSelect}
+              initialFocus
+              className="p-3 pointer-events-auto"
+            />
+          </PopoverContent>
+        </Popover>
+      </div>
 
       {/* Current selection indicator */}
       <div className="text-xs text-muted-foreground ml-auto hidden sm:block">

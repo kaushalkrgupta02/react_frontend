@@ -980,25 +980,25 @@ export default function VenueModePreferences({ selectedVenueId }: VenueModePrefe
   return (
     <div className="flex flex-col h-full">
       {/* Sub-tabs */}
-      <div className="flex border-b border-border bg-background px-4 overflow-x-auto">
+      <div className="flex border-b border-border bg-background px-1 sm:px-4 overflow-x-auto scrollbar-hide gap-0.5">
         {tabs.map(({ id, label, icon: Icon }) => (
           <button
             key={id}
             onClick={() => setActiveTab(id)}
-            className={`flex-1 min-w-0 flex items-center justify-center gap-1.5 py-3 text-sm font-medium border-b-2 transition-colors ${
+            className={`flex-shrink-0 flex items-center justify-center gap-1.5 px-3 sm:px-4 py-3 text-xs sm:text-sm font-medium border-b-2 transition-colors whitespace-nowrap min-w-[80px] sm:min-w-0 ${
               activeTab === id
                 ? 'border-primary text-primary'
                 : 'border-transparent text-muted-foreground hover:text-foreground'
             }`}
           >
             <Icon className="w-4 h-4 flex-shrink-0" />
-            <span className="truncate">{label}</span>
+            <span className="text-[10px] sm:text-sm">{label}</span>
           </button>
         ))}
       </div>
 
       {/* Content */}
-      <div className="flex-1 overflow-y-auto p-4">
+      <div className="flex-1 overflow-y-auto p-3 sm:p-4">
         {activeTab === 'branding' && (
           <BrandingSection venue={selectedVenue} onUpdate={updateLineSkipSettings} />
         )}

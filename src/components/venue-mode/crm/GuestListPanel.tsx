@@ -55,10 +55,10 @@ export default function GuestListPanel({ venueId }: GuestListPanelProps) {
   }
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-4 p-3 sm:p-4">
       {/* Header with Add Button */}
       <div className="flex items-center gap-2">
-        <div className="relative flex-1">
+        <div className="relative flex-1 min-w-0">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
           <Input
             placeholder="Search guests by name, phone, or tag..."
@@ -67,29 +67,29 @@ export default function GuestListPanel({ venueId }: GuestListPanelProps) {
             className="pl-9"
           />
         </div>
-        <Button onClick={() => setAddGuestOpen(true)} size="sm">
-          <Plus className="w-4 h-4 mr-1" />
-          Add
+        <Button onClick={() => setAddGuestOpen(true)} size="sm" className="flex-shrink-0">
+          <Plus className="w-4 h-4 sm:mr-1" />
+          <span className="hidden sm:inline">Add</span>
         </Button>
       </div>
 
       {/* Stats */}
-      <div className="grid grid-cols-3 gap-3">
-        <div className="p-3 rounded-lg bg-card border border-border text-center">
-          <p className="text-2xl font-bold text-foreground">{guests.length}</p>
-          <p className="text-xs text-muted-foreground">Total Guests</p>
+      <div className="grid grid-cols-3 gap-2 sm:gap-3">
+        <div className="p-2 sm:p-3 rounded-lg bg-card border border-border text-center">
+          <p className="text-xl sm:text-2xl font-bold text-foreground">{guests.length}</p>
+          <p className="text-[10px] sm:text-xs text-muted-foreground">Total Guests</p>
         </div>
-        <div className="p-3 rounded-lg bg-card border border-border text-center">
-          <p className="text-2xl font-bold text-amber-400">
+        <div className="p-2 sm:p-3 rounded-lg bg-card border border-border text-center">
+          <p className="text-xl sm:text-2xl font-bold text-amber-400">
             {guests.filter(g => g.vip_status !== 'regular').length}
           </p>
-          <p className="text-xs text-muted-foreground">VIP Guests</p>
+          <p className="text-[10px] sm:text-xs text-muted-foreground">VIP Guests</p>
         </div>
-        <div className="p-3 rounded-lg bg-card border border-border text-center">
-          <p className="text-2xl font-bold text-foreground">
+        <div className="p-2 sm:p-3 rounded-lg bg-card border border-border text-center">
+          <p className="text-xl sm:text-2xl font-bold text-foreground">
             {guests.filter(g => g.total_visits >= 5).length}
           </p>
-          <p className="text-xs text-muted-foreground">Regulars (5+)</p>
+          <p className="text-[10px] sm:text-xs text-muted-foreground whitespace-nowrap">Regulars (5+)</p>
         </div>
       </div>
 
@@ -114,47 +114,47 @@ export default function GuestListPanel({ venueId }: GuestListPanelProps) {
               <button
                 key={guest.id}
                 onClick={() => handleSelectGuest(guest)}
-                className="w-full p-4 rounded-lg bg-card border border-border hover:border-primary/50 transition-colors text-left"
+                className="w-full p-3 sm:p-4 rounded-lg bg-card border border-border hover:border-primary/50 transition-colors text-left"
               >
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 rounded-full bg-primary/20 flex items-center justify-center">
-                      <User className="w-5 h-5 text-primary" />
+                <div className="flex items-center justify-between gap-2">
+                  <div className="flex items-center gap-2 sm:gap-3 flex-1 min-w-0">
+                    <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-primary/20 flex items-center justify-center flex-shrink-0">
+                      <User className="w-4 h-4 sm:w-5 sm:h-5 text-primary" />
                     </div>
-                    <div>
-                      <div className="flex items-center gap-2">
-                        <p className="font-medium text-foreground">
+                    <div className="flex-1 min-w-0">
+                      <div className="flex items-center gap-1.5 sm:gap-2">
+                        <p className="font-medium text-foreground text-sm sm:text-base truncate">
                           {guest.guest_name || 'Guest'}
                         </p>
-                        <Badge className={cn('text-[10px] px-1.5', vipStatusColors[guest.vip_status])}>
+                        <Badge className={cn('text-[9px] sm:text-[10px] px-1 sm:px-1.5 flex-shrink-0', vipStatusColors[guest.vip_status])}>
                           {guest.vip_status.toUpperCase()}
                         </Badge>
                       </div>
-                      <div className="flex items-center gap-3 text-xs text-muted-foreground mt-1">
+                      <div className="flex items-center gap-2 sm:gap-3 text-[10px] sm:text-xs text-muted-foreground mt-0.5 sm:mt-1">
                         {guest.guest_phone && (
-                          <span className="flex items-center gap-1">
-                            <Phone className="w-3 h-3" />
-                            {guest.guest_phone}
+                          <span className="flex items-center gap-1 truncate">
+                            <Phone className="w-3 h-3 flex-shrink-0" />
+                            <span className="truncate">{guest.guest_phone}</span>
                           </span>
                         )}
-                        <span className="flex items-center gap-1">
+                        <span className="flex items-center gap-1 flex-shrink-0">
                           <Calendar className="w-3 h-3" />
                           {guest.total_visits} visits
                         </span>
                       </div>
                     </div>
                   </div>
-                  <ChevronRight className="w-5 h-5 text-muted-foreground" />
+                  <ChevronRight className="w-4 h-4 sm:w-5 sm:h-5 text-muted-foreground flex-shrink-0" />
                 </div>
                 {guest.tags.length > 0 && (
-                  <div className="flex flex-wrap gap-1 mt-2 pl-13">
+                  <div className="flex flex-wrap gap-1 mt-2 pl-10 sm:pl-13">
                     {guest.tags.slice(0, 3).map((tag, i) => (
-                      <Badge key={i} variant="secondary" className="text-[10px]">
+                      <Badge key={i} variant="secondary" className="text-[9px] sm:text-[10px]">
                         {tag}
                       </Badge>
                     ))}
                     {guest.tags.length > 3 && (
-                      <Badge variant="secondary" className="text-[10px]">
+                      <Badge variant="secondary" className="text-[9px] sm:text-[10px]">
                         +{guest.tags.length - 3}
                       </Badge>
                     )}

@@ -48,7 +48,7 @@ export default function VenueModePOS({ venueId }: VenueModePOSProps) {
   return (
     <div className="flex flex-col h-full">
       {/* View Mode Toggle */}
-      <div className="flex items-center gap-1 p-2 border-b bg-muted/30">
+      <div className="flex items-center gap-0.5 sm:gap-1 p-1.5 sm:p-2 border-b bg-muted/30 overflow-x-auto">
         {viewModes.map((mode) => (
           <Button
             key={mode.id}
@@ -56,12 +56,12 @@ export default function VenueModePOS({ venueId }: VenueModePOSProps) {
             size="sm"
             onClick={() => setViewMode(mode.id)}
             className={cn(
-              "gap-2",
+              "gap-1 sm:gap-2 px-2.5 sm:px-3 text-xs sm:text-sm flex-shrink-0",
               viewMode === mode.id && "shadow-sm"
             )}
           >
             {mode.icon}
-            {mode.label}
+            <span className="whitespace-nowrap">{mode.label}</span>
           </Button>
         ))}
       </div>

@@ -179,28 +179,28 @@ export default function VenueModePage() {
         <div className="flex items-center justify-between px-4 py-3">
           <div className="flex items-center gap-3">
             {/* Venue Branding */}
-            <div className="flex items-center gap-3">
+            <div className="flex items-center gap-2 sm:gap-3 flex-1 min-w-0">
               {selectedVenue?.cover_image_url ? (
                 <img 
                   src={selectedVenue.cover_image_url} 
                   alt={selectedVenue.name} 
-                  className="w-10 h-10 rounded-lg object-cover border border-border"
+                  className="w-10 h-10 rounded-lg object-cover border border-border flex-shrink-0"
                 />
               ) : (
-                <div className="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center">
+                <div className="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center flex-shrink-0">
                   <Building2 className="w-5 h-5 text-primary" />
                 </div>
               )}
-              <div>
-                <h1 className="text-lg font-bold text-foreground">
+              <div className="flex-1 min-w-0">
+                <h1 className="text-base sm:text-lg font-bold text-foreground truncate">
                   {selectedVenue?.name || 'Venue Manager'}
                 </h1>
-                <p className="text-xs text-muted-foreground">Welcome, {displayName}</p>
+                <p className="text-xs text-muted-foreground truncate">Welcome, {displayName}</p>
               </div>
             </div>
           </div>
-          <div className="flex items-center gap-2">
-            <span className="text-xs text-muted-foreground">{roleLabel}</span>
+          <div className="flex items-center gap-1 sm:gap-2 flex-shrink-0">
+            <span className="text-[10px] sm:text-xs text-muted-foreground hidden sm:inline">{roleLabel}</span>
             <Button 
               variant="ghost" 
               size="icon" 

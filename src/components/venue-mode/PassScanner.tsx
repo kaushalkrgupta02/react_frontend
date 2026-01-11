@@ -8,9 +8,10 @@ import {
 } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { Camera, Search, X, Loader2, AlertCircle } from 'lucide-react';
+import { Camera, Search, X, Loader2, AlertCircle, Settings } from 'lucide-react';
 import { playSuccessSound, playErrorSound } from '@/lib/audioFeedback';
 import { toast } from 'sonner';
+import { requestCameraPermission, getPermissionInstructions } from '@/lib/permissions';
 import type { ScannerMode, QRCodeData } from '@/types/venue-mode';
 
 interface PassScannerProps {
@@ -126,9 +127,40 @@ const PassScanner = forwardRef<HTMLDivElement, PassScannerProps>(function PassSc
 
   const startCamera = useCallback(async () => {
     setCameraError(null);
+    
+    // First, request permission with user-friendly error handling
+    const permissionResult = await requestCameraPermission();
+    
+    if (!permissionResult.granted) {
+      setCameraError(permissionResult.error || 'Unable to access camera');
+      
+      if (permissionResult.state === 'denied') {
+        const instructions = getPermissionInstructions('camera');
+        toast.error(
+          <div className="space-y-2">
+            <p className="font-medium">Camera Access Denied</p>
+            <p className="text-xs whitespace-pre-line">{instructions}</p>
+            <p className="text-xs">Then refresh the page and try again.</p>
+          </div>,
+          { duration: 8000 }
+        );
+      } else if (permissionResult.state === 'unsupported') {
+        toast.error(permissionResult.error || 'Camera not supported');
+      } else {
+        toast.error('Unable to access camera');
+      }
+      setMode('manual');
+      return;
+    }
+    
+    // Permission granted, now start the camera stream
     try {
       const stream = await navigator.mediaDevices.getUserMedia({
-        video: { facingMode: 'environment' },
+        video: { 
+          facingMode: 'environment',
+          width: { ideal: 1280 },
+          height: { ideal: 720 }
+        },
       });
       streamRef.current = stream;
 
@@ -140,9 +172,9 @@ const PassScanner = forwardRef<HTMLDivElement, PassScannerProps>(function PassSc
         scanForQRCode();
       }
     } catch (error) {
-      console.error('Camera access error:', error);
-      setCameraError('Unable to access camera. Please check permissions.');
-      toast.error('Unable to access camera');
+      console.error('Camera start error:', error);
+      setCameraError('Unable to start camera');
+      toast.error('Camera failed to start. Please try again.');
       setMode('manual');
     }
   }, [scanForQRCode]);

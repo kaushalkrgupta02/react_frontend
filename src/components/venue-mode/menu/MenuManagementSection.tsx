@@ -514,7 +514,7 @@ export default function MenuManagementSection({ venueId }: MenuManagementSection
           <p className="text-muted-foreground text-xs">Create a menu or upload a file to get started</p>
         </div>
       ) : (
-        <div className="space-y-3">
+        <div className="space-y-2 sm:space-y-3">
           {menus.map((menu) => (
             <MenuCard
               key={menu.id}
@@ -708,54 +708,61 @@ function MenuCard({ menu, isExpanded, onToggle, onEdit, onDelete, onUpdate }: Me
     <div className="bg-card rounded-xl border border-border overflow-hidden">
       {/* Header */}
       <div 
-        className="flex items-center justify-between p-4 cursor-pointer hover:bg-muted/30 transition-colors"
+        className="p-3 sm:p-4 cursor-pointer hover:bg-muted/30 transition-colors"
         onClick={onToggle}
       >
-        <div className="flex items-center gap-3">
-          {isExpanded ? (
-            <ChevronDown className="w-4 h-4 text-muted-foreground" />
-          ) : (
-            <ChevronRight className="w-4 h-4 text-muted-foreground" />
-          )}
-          <div>
-            <h4 className="font-medium text-foreground">{menu.name}</h4>
-            {menu.description && (
-              <p className="text-xs text-muted-foreground">{menu.description}</p>
+        {/* Mobile: Two-row layout, Desktop: Single row */}
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 sm:gap-3">
+          {/* Title section */}
+          <div className="flex items-start gap-2 sm:gap-3 flex-1 min-w-0">
+            {isExpanded ? (
+              <ChevronDown className="w-4 h-4 text-muted-foreground flex-shrink-0 mt-0.5" />
+            ) : (
+              <ChevronRight className="w-4 h-4 text-muted-foreground flex-shrink-0 mt-0.5" />
             )}
+            <div className="flex-1 min-w-0">
+              <h4 className="font-medium text-foreground text-sm sm:text-base truncate">{menu.name}</h4>
+              {menu.description && (
+                <p className="text-xs text-muted-foreground line-clamp-2 mt-0.5">{menu.description}</p>
+              )}
+            </div>
           </div>
-        </div>
-        <div className="flex items-center gap-2" onClick={(e) => e.stopPropagation()}>
-          <Badge variant={menu.is_active ? 'default' : 'secondary'} className="text-xs">
-            {(items?.length ?? 0)} items
-          </Badge>
-          <Switch
-            checked={menu.is_active}
-            onCheckedChange={(checked) => onUpdate({ id: menu.id, is_active: checked })}
-          />
-          <Button size="icon" variant="ghost" onClick={onEdit}>
-            <Edit2 className="w-4 h-4" />
-          </Button>
-          <AlertDialog>
-            <AlertDialogTrigger asChild>
-              <Button size="icon" variant="ghost" className="text-destructive">
-                <Trash2 className="w-4 h-4" />
-              </Button>
-            </AlertDialogTrigger>
-            <AlertDialogContent>
-              <AlertDialogHeader>
-                <AlertDialogTitle>Delete Menu?</AlertDialogTitle>
-                <AlertDialogDescription>
-                  This will delete "{menu.name}" and all its items. This cannot be undone.
-                </AlertDialogDescription>
-              </AlertDialogHeader>
-              <AlertDialogFooter>
-                <AlertDialogCancel>Cancel</AlertDialogCancel>
-                <AlertDialogAction onClick={onDelete} className="bg-destructive text-destructive-foreground">
-                  Delete
-                </AlertDialogAction>
-              </AlertDialogFooter>
-            </AlertDialogContent>
-          </AlertDialog>
+          
+          {/* Controls section */}
+          <div className="flex items-center gap-1 sm:gap-2 pl-6 sm:pl-0" onClick={(e) => e.stopPropagation()}>
+            <Badge variant={menu.is_active ? 'default' : 'secondary'} className="text-[10px] sm:text-xs px-1.5 sm:px-2 py-0">
+              {(items?.length ?? 0)} Items
+            </Badge>
+            <Switch
+              checked={menu.is_active}
+              onCheckedChange={(checked) => onUpdate({ id: menu.id, is_active: checked })}
+              className="scale-90 sm:scale-100"
+            />
+            <Button size="icon" variant="ghost" onClick={onEdit} className="h-8 w-8 sm:h-9 sm:w-9">
+              <Edit2 className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
+            </Button>
+            <AlertDialog>
+              <AlertDialogTrigger asChild>
+                <Button size="icon" variant="ghost" className="text-destructive h-8 w-8 sm:h-9 sm:w-9">
+                  <Trash2 className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
+                </Button>
+              </AlertDialogTrigger>
+              <AlertDialogContent>
+                <AlertDialogHeader>
+                  <AlertDialogTitle>Delete Menu?</AlertDialogTitle>
+                  <AlertDialogDescription>
+                    This will delete "{menu.name}" and all its items. This cannot be undone.
+                  </AlertDialogDescription>
+                </AlertDialogHeader>
+                <AlertDialogFooter>
+                  <AlertDialogCancel>Cancel</AlertDialogCancel>
+                  <AlertDialogAction onClick={onDelete} className="bg-destructive text-destructive-foreground">
+                    Delete
+                  </AlertDialogAction>
+                </AlertDialogFooter>
+              </AlertDialogContent>
+            </AlertDialog>
+          </div>
         </div>
       </div>
 
@@ -774,59 +781,83 @@ function MenuCard({ menu, isExpanded, onToggle, onEdit, onDelete, onUpdate }: Me
                 {(items ?? []).map((item) => (
                   <div
                     key={item.id}
-                    className="flex items-center justify-between p-3 bg-muted/30 rounded-lg"
+                    className="p-2.5 sm:p-3 bg-muted/30 rounded-lg"
                   >
-                    <div className="flex-1 min-w-0">
-                      <div className="flex items-center gap-2">
-                        <span className="font-medium text-sm text-foreground truncate">{item.name}</span>
-                        {item.category && (
-                          <Badge variant="outline" className="text-xs">{item.category}</Badge>
+                    {/* Mobile: Two-row layout, Desktop: Single row */}
+                    <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
+                      {/* Item info */}
+                      <div className="flex-1 min-w-0 space-y-1">
+                        {/* Name + Category on one line */}
+                        <div className="flex items-start gap-1.5 flex-wrap">
+                          <span className="font-medium text-sm text-foreground break-words flex-1 min-w-0">
+                            {item.name}
+                          </span>
+                          {item.category && (
+                            <Badge variant="outline" className="text-[10px] sm:text-xs px-1.5 py-0 flex-shrink-0">
+                              {item.category}
+                            </Badge>
+                          )}
+                          {!item.is_available && (
+                            <Badge variant="secondary" className="text-[10px] sm:text-xs px-1.5 py-0 flex-shrink-0">
+                              Unavailable
+                            </Badge>
+                          )}
+                        </div>
+                        
+                        {/* Description */}
+                        {item.description && (
+                          <p className="text-xs text-muted-foreground line-clamp-2">{item.description}</p>
                         )}
-                        {!item.is_available && (
-                          <Badge variant="secondary" className="text-xs">Unavailable</Badge>
+                        
+                        {/* Dietary tags */}
+                        {(item.dietary_tags?.length ?? 0) > 0 && (
+                          <div className="flex gap-1 flex-wrap">
+                            {(item.dietary_tags ?? []).map(tag => (
+                              <Badge key={tag} variant="secondary" className="text-[10px] px-1.5 py-0">{tag}</Badge>
+                            ))}
+                          </div>
                         )}
                       </div>
-                      {item.description && (
-                        <p className="text-xs text-muted-foreground truncate">{item.description}</p>
-                      )}
-                      {(item.dietary_tags?.length ?? 0) > 0 && (
-                        <div className="flex gap-1 mt-1">
-                          {(item.dietary_tags ?? []).map(tag => (
-                            <Badge key={tag} variant="secondary" className="text-xs py-0">{tag}</Badge>
-                          ))}
-                        </div>
-                      )}
-                    </div>
-                    <div className="flex items-center gap-2 ml-2">
-                      {item.price && (
-                        <span className="text-sm font-medium text-foreground">
-                          {new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', maximumFractionDigits: 0 }).format(item.price)}
-                        </span>
-                      )}
-                      <Button size="icon" variant="ghost" className="h-7 w-7" onClick={() => handleOpenItemDialog(item)}>
-                        <Edit2 className="w-3 h-3" />
-                      </Button>
-                      <AlertDialog>
-                        <AlertDialogTrigger asChild>
-                          <Button size="icon" variant="ghost" className="h-7 w-7 text-destructive">
-                            <Trash2 className="w-3 h-3" />
+                      
+                      {/* Price + Actions */}
+                      <div className="flex items-center justify-between sm:justify-end gap-2 sm:gap-1.5 flex-shrink-0">
+                        {item.price && (
+                          <span className="text-xs sm:text-sm font-medium text-foreground whitespace-nowrap">
+                            {new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', maximumFractionDigits: 0 }).format(item.price)}
+                          </span>
+                        )}
+                        <div className="flex items-center gap-0.5">
+                          <Button 
+                            size="icon" 
+                            variant="ghost" 
+                            className="h-7 w-7 sm:h-8 sm:w-8" 
+                            onClick={() => handleOpenItemDialog(item)}
+                          >
+                            <Edit2 className="w-3 h-3 sm:w-3.5 sm:h-3.5" />
                           </Button>
-                        </AlertDialogTrigger>
-                        <AlertDialogContent>
-                          <AlertDialogHeader>
-                            <AlertDialogTitle>Delete Item?</AlertDialogTitle>
-                            <AlertDialogDescription>
-                              Remove "{item.name}" from this menu?
-                            </AlertDialogDescription>
-                          </AlertDialogHeader>
-                          <AlertDialogFooter>
-                            <AlertDialogCancel>Cancel</AlertDialogCancel>
-                            <AlertDialogAction onClick={() => deleteItem(item.id)} className="bg-destructive text-destructive-foreground">
-                              Delete
-                            </AlertDialogAction>
-                          </AlertDialogFooter>
-                        </AlertDialogContent>
-                      </AlertDialog>
+                          <AlertDialog>
+                            <AlertDialogTrigger asChild>
+                              <Button size="icon" variant="ghost" className="h-7 w-7 sm:h-8 sm:w-8 text-destructive">
+                                <Trash2 className="w-3 h-3 sm:w-3.5 sm:h-3.5" />
+                              </Button>
+                            </AlertDialogTrigger>
+                            <AlertDialogContent>
+                              <AlertDialogHeader>
+                                <AlertDialogTitle>Delete Item?</AlertDialogTitle>
+                                <AlertDialogDescription>
+                                  Remove "{item.name}" from this menu?
+                                </AlertDialogDescription>
+                              </AlertDialogHeader>
+                              <AlertDialogFooter>
+                                <AlertDialogCancel>Cancel</AlertDialogCancel>
+                                <AlertDialogAction onClick={() => deleteItem(item.id)} className="bg-destructive text-destructive-foreground">
+                                  Delete
+                                </AlertDialogAction>
+                              </AlertDialogFooter>
+                            </AlertDialogContent>
+                          </AlertDialog>
+                        </div>
+                      </div>
                     </div>
                   </div>
                 ))}

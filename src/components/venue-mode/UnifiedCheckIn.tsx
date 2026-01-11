@@ -23,7 +23,8 @@ import {
   Mail,
   MapPin,
   Plus,
-  Cigarette
+  Cigarette,
+  Settings
 } from 'lucide-react';
 import { useGuestProfiles, GuestProfile } from '@/hooks/useGuestProfiles';
 import { useVenueTables } from '@/hooks/useVenueTables';
@@ -44,6 +45,7 @@ import { formatPrice } from '@/types/venue-mode';
 import { usePackagePurchases, PackagePurchaseWithItems } from '@/hooks/usePackagePurchases';
 import { usePackageRedemptions } from '@/hooks/usePackageRedemptions';
 import { useAuth } from '@/hooks/useAuth';
+import { requestCameraPermission, getPermissionInstructions } from '@/lib/permissions';
 
 type Mode = 'idle' | 'scan' | 'manual' | 'walkin';
 type DetectedType = 'booking' | 'pass' | 'package' | 'walkin' | null;
@@ -402,9 +404,40 @@ export default function UnifiedCheckIn({ venueId }: UnifiedCheckInProps) {
 
   const startCamera = useCallback(async () => {
     setCameraError(null);
+    
+    // First, request permission with user-friendly error handling
+    const permissionResult = await requestCameraPermission();
+    
+    if (!permissionResult.granted) {
+      setCameraError(permissionResult.error || 'Unable to access camera');
+      
+      if (permissionResult.state === 'denied') {
+        const instructions = getPermissionInstructions('camera');
+        toast.error(
+          <div className="space-y-2">
+            <p className="font-medium">Camera Access Denied</p>
+            <p className="text-xs whitespace-pre-line">{instructions}</p>
+            <p className="text-xs">Then refresh the page and try again.</p>
+          </div>,
+          { duration: 8000 }
+        );
+      } else if (permissionResult.state === 'unsupported') {
+        toast.error(permissionResult.error || 'Camera not supported');
+      } else {
+        toast.error('Camera access denied. Please use manual entry.');
+      }
+      setMode('manual');
+      return;
+    }
+    
+    // Permission granted, now start the camera stream
     try {
       const stream = await navigator.mediaDevices.getUserMedia({
-        video: { facingMode: 'environment' },
+        video: { 
+          facingMode: 'environment',
+          width: { ideal: 1280 },
+          height: { ideal: 720 }
+        },
       });
       streamRef.current = stream;
 
@@ -416,9 +449,10 @@ export default function UnifiedCheckIn({ venueId }: UnifiedCheckInProps) {
         scanForQRCode();
       }
     } catch (error) {
-      console.error('Camera access error:', error);
-      setCameraError('Unable to access camera');
-      toast.error('Camera access denied. Please use manual entry.');
+      console.error('Camera start error:', error);
+      setCameraError('Unable to start camera');
+      toast.error('Camera failed to start. Please try again.');
+      setMode('manual');
     }
   }, [scanForQRCode]);
 

@@ -18,6 +18,10 @@
   "categories": ["business", "productivity"],
   "scope": "/",
   "prefer_related_applications": false,
+  "permissions": [
+    "camera",
+    "geolocation"
+  ],
   "shortcuts": [
     {
       "name": "Guests",
@@ -31,14 +35,6 @@
       "short_name": "Orders",
       "description": "View and manage orders",
       "url": "/orders",
-      "icons": [{ "src": "/logo.png", "sizes": "192x192" }]
-    },
-
-    {
-      "name": "Staff",
-      "short_name": "Staff",
-      "description": "Manage staff schedules",
-      "url": "/staff",
       "icons": [{ "src": "/logo.png", "sizes": "192x192" }]
     },
 
