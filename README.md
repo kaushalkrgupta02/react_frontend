@@ -1,6 +1,6 @@
-## Nighlty: The All-in-One Multi-Sync Venue Management System
+## Nightly: The All-in-One Multi-Sync Venue Management System: The All-in-One Multi-Sync Venue Management System
 
-### Key Features
+### Key Features:
 1. Administrative & Management Suite: Admins and Venue Managers can seamlessly manage the platform by adding or updating venues, table layouts, and service items.
 
 2. Role-Specific Dashboards: Dedicated interfaces for Staff, Kitchen, and Waiters to track, manage, and approve their respective tasks in real-time.
